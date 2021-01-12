@@ -102,13 +102,6 @@ packages:
       url: "https://mirrors.cloud.tencent.com/dart-pub"
     source: hosted
     version: "1.8.0-nullsafety.1"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
-    source: hosted
-    version: "0.25.0"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -4,7 +4,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 /// 回调函数的类型定义
 typedef _CropRectUpdate = void Function(Rect rect);
@@ -131,7 +130,7 @@ class _CropBoxState extends State<CropBox> {
   Rect resultRect;
 
   // 是否绘制完毕
-  BehaviorSubject<bool> isReady = BehaviorSubject.seeded(false);
+  bool isReady = false;
 
   @override
   void initState() {
@@ -347,7 +346,8 @@ class _CropBoxState extends State<CropBox> {
       _containerPaddingTop = MediaQuery.of(context).padding.top * 2;
       _cropBoxMaxSize = widget.maxCropSize ?? Size(_containerWidth - _containerPaddingRL*2, _containerHeight - _containerPaddingTop - _containerPaddingBottom);
       print("build init data \n _containerWidth: $_containerWidth _containerHeight: $_containerHeight _containerPaddingTop: $_containerPaddingTop");
-      isReady.value = initCrop();
+      isReady = initCrop();
+      setState(() {});
     });
     
     return ClipRect(
@@ -357,44 +357,34 @@ class _CropBoxState extends State<CropBox> {
           onScaleStart: _handleScaleStart,
           onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
           onScaleEnd: _handleScaleEnd,
-          child: StreamBuilder<bool>(
-            stream: isReady,
-            initialData: false,
-            builder: (_, isReady) {
-              if(isReady.data) {
-                return Stack(
-                  children: [
-                    Transform(
-                      transform: Matrix4.identity()
-                        ..scale(max(_scale, 1.0), max(_scale, 1.0))
-                        ..translate(_deltaPoint.dx, _deltaPoint.dy),
-                      origin: _originPos,
-                      // overflowBox解决容器尺寸问题，如果不用overflowBox，则子container过大时，会收到父级大小约束变形
-                      child: OverflowBox(
-                        alignment: Alignment.topLeft,
-                        maxWidth: double.infinity,
-                        maxHeight: double.infinity,
-                        child: Container(
-                          width: _resizeClipSize.width,
-                          height: _resizeClipSize.height,
-                          child: widget.child,
-                        ),
-                      ),
-                    ),
-                    CustomPaint(
-                      size: Size(double.infinity, double.infinity),
-                      painter: DrawRectLight(clipRect: _cropBoxRealRect, borderColor: Theme?.of(context)?.primaryColor ?? widget.borderColor),
-                    ),
-                  ],
-                );
-              }else{
-                return Center(
+          child: isReady ? Stack(
+            children: [
+              Transform(
+                transform: Matrix4.identity()
+                  ..scale(max(_scale, 1.0), max(_scale, 1.0))
+                  ..translate(_deltaPoint.dx, _deltaPoint.dy),
+                origin: _originPos,
+                // overflowBox解决容器尺寸问题，如果不用overflowBox，则子container过大时，会收到父级大小约束变形
+                child: OverflowBox(
+                  alignment: Alignment.topLeft,
+                  maxWidth: double.infinity,
+                  maxHeight: double.infinity,
                   child: Container(
-                    child: Text('资源加载中...'),
+                    width: _resizeClipSize.width,
+                    height: _resizeClipSize.height,
+                    child: widget.child,
                   ),
-                );
-              }
-            }
+                ),
+              ),
+              CustomPaint(
+                size: Size(double.infinity, double.infinity),
+                painter: DrawRectLight(clipRect: _cropBoxRealRect, borderColor: Theme?.of(context)?.primaryColor ?? widget.borderColor),
+              ),
+            ],
+          ): Center(
+            child: Container(
+              child: Text('资源加载中...'),
+            ),
           ),
         ),
       ),
