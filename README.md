@@ -1,7 +1,7 @@
 > 背景：为啥要开发这个组件呢？因为目前在我们的flutter app中，用到了视频合成技术，这里就涉及到视频或者图片素材的裁剪，目前市面上普遍的组件都是基于图片的，并且基本上都是使用canvas进行渲染和裁剪，不太符合我们的业务需求，所以要自己开发一个裁剪组件。
 
 ## 效果展示
-![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c61a57dec424b86b5ffa15831e0fb41~tplv-k3u1fbpfcp-watermark.image)
+![](https://github.com/godaangel/flutter_crop_box/gif/5e941f8d-39a2-45da-9c8c-9eb2f6513498.gif)
 
 ## 需求分析 
 在移动端，基本都是用手势操作，所以在需求设计之初，就考虑到手势的习惯，以及参考大部分编辑工具，定义出了以下几个需求点：
