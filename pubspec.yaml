@@ -1,6 +1,6 @@
 name: crop_box
 description: 一款能够针对各种素材裁剪的组件. Widget for Clip.
-version: 0.0.1
+version: 0.1.0
 author: warrenyang@tencent.com
 homepage:
 

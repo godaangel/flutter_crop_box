@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Rect _resultRect = Rect.zero;
   /// 最大裁剪区域 会结合裁剪比例计算实际裁剪框范围
-  Size _maxCropSize;
+  Size _maxCropSize = Size(300, 300);
   /// 裁剪比例
   Size _cropRatio = Size(16, 9);
   /// 素材尺寸
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 cropRectUpdate: (rect) {
                   _resultRect = rect;
-                  print("裁剪区域移动 $rect");
+                  print("裁剪区域变化 $rect");
                   setState(() {});
                 },
                 child: Image.network(

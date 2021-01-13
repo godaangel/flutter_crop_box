@@ -32,6 +32,7 @@ class CropBox extends StatefulWidget {
   /// 裁剪区域开始变化时的回调
   final Function cropRectUpdateStart;
   /// 裁剪区域变化时的回调
+  /// - 可用于初始生成裁剪区域，以及手势触发的回调
   final _CropRectUpdate cropRectUpdate;
   /// 裁剪区域停止变化时的回调函数，可以获得最终裁剪区域
   /// - 返回值 `Rect rect` 为裁剪区域在素材上的比例
@@ -39,9 +40,6 @@ class CropBox extends StatefulWidget {
   /// - 这个百分比只是LTRB分别相对于原素材宽高的百分比，各个LTRB之间这个**百分比值没有联系**
   /// - LTRB的绝对值有比例关系，比例等于裁剪比例
   final _CropRectUpdate cropRectUpdateEnd;
-  /// 设计稿尺寸 用于计算屏幕大小对应的不同size。
-  /// - 默认 iphone7 2倍图 即Size(750, 1334)
-  final Size designSize;
   
   /// ### 裁剪素材组件 
   /// 
@@ -54,9 +52,9 @@ class CropBox extends StatefulWidget {
   /// 代码示例
   /// ```dart
   /// CropBox(
-  ///   cropRect: Rect.fromLTRB(1 - 0.4083, 0.162, 1, 0.3078), // 2.4倍 随机位置
+  ///   // cropRect: Rect.fromLTRB(1 - 0.4083, 0.162, 1, 0.3078), // 2.4倍 随机位置
   ///   // cropRect: Rect.fromLTRB(0, 0, 0.4083, 0.1457), //2.4倍，都是0,0
-  ///   // cropRect: Rect.fromLTRB(0, 0, 1, 0.3572), // 1倍
+  ///   cropRect: Rect.fromLTRB(0, 0, 1, 0.3572), // 1倍
   ///   clipSize: Size(200, 315),
   ///   cropRatio: Size(16, 9),
   ///   cropRectUpdateEnd: (rect) {
@@ -82,7 +80,7 @@ class CropBox extends StatefulWidget {
   /// )
   /// ```
   /// {@end-tool}
-  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.borderColor, this.maxCropSize, this.maxScale = 10.0, this.designSize});
+  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.borderColor, this.maxCropSize, this.maxScale = 10.0});
 
   @override
   _CropBoxState createState() => _CropBoxState();
@@ -340,15 +338,20 @@ class _CropBoxState extends State<CropBox> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 10)).then((value) {
-      _containerWidth = context.size.width;
-      _containerHeight = context.size.height;
-      _containerPaddingTop = MediaQuery.of(context).padding.top * 2;
-      _cropBoxMaxSize = widget.maxCropSize ?? Size(_containerWidth - _containerPaddingRL*2, _containerHeight - _containerPaddingTop - _containerPaddingBottom);
-      print("build init data \n _containerWidth: $_containerWidth _containerHeight: $_containerHeight _containerPaddingTop: $_containerPaddingTop");
-      isReady = initCrop();
-      setState(() {});
-    });
+    if(!isReady) {
+      Future.delayed(Duration(milliseconds: 10)).then((value) {
+        _containerWidth = context.size.width;
+        _containerHeight = context.size.height;
+        _containerPaddingTop = MediaQuery.of(context).padding.top * 2;
+        _cropBoxMaxSize = widget.maxCropSize ?? Size(_containerWidth - _containerPaddingRL*2, _containerHeight - _containerPaddingTop - _containerPaddingBottom);
+        print("build init data \n _containerWidth: $_containerWidth _containerHeight: $_containerHeight _containerPaddingTop: $_containerPaddingTop");
+        isReady = initCrop();
+        if(widget.cropRectUpdate != null) {
+          widget.cropRectUpdate(resultRect);
+        }
+        setState(() {});
+      });
+    }
     
     return ClipRect(
       child: Container(
