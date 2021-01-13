@@ -347,6 +347,7 @@ class _CropBoxState extends State<CropBox> {
         print("build init data \n _containerWidth: $_containerWidth _containerHeight: $_containerHeight _containerPaddingTop: $_containerPaddingTop");
         isReady = initCrop();
         if(widget.cropRectUpdate != null) {
+          resultRect = transPointToCropArea();
           widget.cropRectUpdate(resultRect);
         }
         setState(() {});
