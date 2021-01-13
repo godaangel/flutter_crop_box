@@ -34,6 +34,11 @@
       url: https://github.com/godaangel/flutter_crop_box.git
 ```
 
+#### pub.dev引入
+```yaml
+  crop_box: ^0.1.0
+```
+
 #### 代码
 ```dart
 import 'package:crop_box/crop_box.dart';
