@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## [0.1.0] - 2021-01-13.
 
-* TODO: Describe initial release.
+* 发布新包，支持各种类型的素材裁剪操作和区域计算.
