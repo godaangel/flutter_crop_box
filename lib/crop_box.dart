@@ -3,6 +3,7 @@ library crop_box;
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// 回调函数的类型定义
@@ -130,16 +131,10 @@ class _CropBoxState extends State<CropBox> {
   // 是否绘制完毕
   bool isReady = false;
 
+  Future<void> _loading;
+
   @override
   void initState() {
-    resultRect = widget.cropRect;
-    assert(resultRect?.left == null || resultRect.left >= 0 && resultRect.left <=1);
-    assert(resultRect?.right == null || resultRect.right >= 0 && resultRect.right <=1);
-    assert(resultRect?.top == null || resultRect.top >= 0 && resultRect.top <=1);
-    assert(resultRect?.bottom == null || resultRect.bottom >= 0 && resultRect.bottom <=1);
-
-    _originClipSize = widget.clipSize;
-    _cropRatio = widget.cropRatio ?? Size(16, 9);
     super.initState();
   }
 
@@ -334,12 +329,32 @@ class _CropBoxState extends State<CropBox> {
 
     return Size(_realWidth, _realHeight);
   }
+
+  @override
+  void didUpdateWidget(covariant CropBox oldWidget) {
+    if(widget.cropRatio != oldWidget.cropRatio) {
+      setState(() {
+        isReady = false;
+      });
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
   
 
   @override
   Widget build(BuildContext context) {
     if(!isReady) {
-      Future.delayed(Duration(milliseconds: 10)).then((value) {
+      resultRect = widget.cropRect;
+      assert(resultRect?.left == null || resultRect.left >= 0 && resultRect.left <=1);
+      assert(resultRect?.right == null || resultRect.right >= 0 && resultRect.right <=1);
+      assert(resultRect?.top == null || resultRect.top >= 0 && resultRect.top <=1);
+      assert(resultRect?.bottom == null || resultRect.bottom >= 0 && resultRect.bottom <=1);
+
+      _originClipSize = widget.clipSize;
+      _cropRatio = widget.cropRatio ?? Size(16, 9);
+
+      _loading = Future.delayed(Duration(milliseconds: 10)).then((value) {
         _containerWidth = context.size.width;
         _containerHeight = context.size.height;
         _containerPaddingTop = MediaQuery.of(context).padding.top * 2;
@@ -354,44 +369,54 @@ class _CropBoxState extends State<CropBox> {
       });
     }
     
-    return ClipRect(
-      child: Container(
-        color: Color(0xff141414),
-        child: GestureDetector(
-          onScaleStart: _handleScaleStart,
-          onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
-          onScaleEnd: _handleScaleEnd,
-          child: isReady ? Stack(
-            children: [
-              Transform(
-                transform: Matrix4.identity()
-                  ..scale(max(_scale, 1.0), max(_scale, 1.0))
-                  ..translate(_deltaPoint.dx, _deltaPoint.dy),
-                origin: _originPos,
-                // overflowBox解决容器尺寸问题，如果不用overflowBox，则子container过大时，会收到父级大小约束变形
-                child: OverflowBox(
-                  alignment: Alignment.topLeft,
-                  maxWidth: double.infinity,
-                  maxHeight: double.infinity,
+    return FutureBuilder(
+      future: _loading,
+      builder: (_, snapshot) {
+        return ClipRect(
+          child: Container(
+            color: Color(0xff141414),
+            child: GestureDetector(
+              onScaleStart: _handleScaleStart,
+              onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
+              onScaleEnd: _handleScaleEnd,
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 200),
+                child: (isReady && snapshot.connectionState == ConnectionState.done) ? Stack(
+                  children: [
+                    Transform(
+                      transform: Matrix4.identity()
+                        ..scale(max(_scale, 1.0), max(_scale, 1.0))
+                        ..translate(_deltaPoint.dx, _deltaPoint.dy),
+                      origin: _originPos,
+                      // overflowBox解决容器尺寸问题，如果不用overflowBox，则子container过大时，会收到父级大小约束变形
+                      child: OverflowBox(
+                        alignment: Alignment.topLeft,
+                        maxWidth: double.infinity,
+                        maxHeight: double.infinity,
+                        child: Container(
+                          width: _resizeClipSize.width,
+                          height: _resizeClipSize.height,
+                          child: widget.child,
+                        ),
+                      ),
+                    ),
+                    CustomPaint(
+                      size: Size(double.infinity, double.infinity),
+                      painter: DrawRectLight(clipRect: _cropBoxRealRect, borderColor: Theme?.of(context)?.primaryColor ?? widget.borderColor),
+                    ),
+                  ],
+                ): Center(
                   child: Container(
-                    width: _resizeClipSize.width,
-                    height: _resizeClipSize.height,
-                    child: widget.child,
+                    child: Center(child: CupertinoActivityIndicator(
+                      radius: 12,
+                    )),
                   ),
                 ),
               ),
-              CustomPaint(
-                size: Size(double.infinity, double.infinity),
-                painter: DrawRectLight(clipRect: _cropBoxRealRect, borderColor: Theme?.of(context)?.primaryColor ?? widget.borderColor),
-              ),
-            ],
-          ): Center(
-            child: Container(
-              child: Text('资源加载中...'),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 

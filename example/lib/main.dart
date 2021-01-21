@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,54 +103,107 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 height: 240.w,
                 padding: EdgeInsets.all(16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      "裁剪区域: ",
-                      style: TextStyle(
-                        fontFamily: "PingFang SC",
-                        fontSize: 28.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w500,
+                    Expanded(
+                      flex: 0,
+                      child: Container(
+                        width: 150,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "裁剪区域: ",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              "left: ${_resultRect.left.toStringAsFixed(5)}",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              "top: ${_resultRect.top.toStringAsFixed(5)}",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              "right: ${_resultRect.right.toStringAsFixed(5)}",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              "bottom: ${_resultRect.bottom.toStringAsFixed(5)}",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Text(
-                      "left: ${_resultRect.left.toStringAsFixed(5)}",
-                      style: TextStyle(
-                        fontFamily: "PingFang SC",
-                        fontSize: 28.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w500,
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CupertinoButton(
+                            color: Colors.blue,
+                            child: Text(
+                              "1:1",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _cropRatio = Size(1, 1);
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          CupertinoButton(
+                            color: Colors.blue,
+                            child: Text(
+                              "16:9",
+                              style: TextStyle(
+                                fontFamily: "PingFang SC",
+                                fontSize: 28.sp,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _cropRatio = Size(16, 9);
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      "top: ${_resultRect.top.toStringAsFixed(5)}",
-                      style: TextStyle(
-                        fontFamily: "PingFang SC",
-                        fontSize: 28.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      "right: ${_resultRect.right.toStringAsFixed(5)}",
-                      style: TextStyle(
-                        fontFamily: "PingFang SC",
-                        fontSize: 28.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      "bottom: ${_resultRect.bottom.toStringAsFixed(5)}",
-                      style: TextStyle(
-                        fontFamily: "PingFang SC",
-                        fontSize: 28.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),
