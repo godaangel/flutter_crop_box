@@ -47,7 +47,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
   crop_box: ^0.1.0
 ```
 
-#### 代码
+#### Code
 ```dart
 import 'package:crop_box/crop_box.dart';
 
