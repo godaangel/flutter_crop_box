@@ -11,35 +11,46 @@ typedef _CropRectUpdate = void Function(Rect rect);
 class CropBox extends StatefulWidget {
 
   /// 初始裁剪区域（LTRB均是 0 到 1 的double类型）
-  /// - 如果不填，默认会填充并居中，表现形式类似cover
+  /// 
+  /// 如果不填，默认会填充并居中，表现形式类似cover
   final Rect cropRect;
   /// 待裁剪素材的尺寸
   final Size clipSize;
   /// 子组件
-  /// - 一般是待裁剪素材
+  /// 
+  /// 一般是待裁剪素材
   final Widget child;
   /// 裁剪框比例
-  /// - 默认 16:9
+  /// 
+  /// 默认 16:9
   final Size cropRatio;
   /// 裁剪框当前比例下最大宽高
-  /// - 主要是用于需要主动调整裁剪框大小时使用 如果没有特殊需求，不需要配置
+  /// 
+  /// 主要是用于需要主动调整裁剪框大小时使用 如果没有特殊需求，不需要配置
   final Size maxCropSize;
-    /// 最大放大尺寸
-  /// - 允许放大的最大尺寸，默认10.0
+  /// 最大放大尺寸
+  /// 
+  /// 允许放大的最大尺寸，默认10.0
   final double maxScale;
   /// 裁剪框边框颜色
-  /// - 默认 Colors.White
+  /// 
+  /// 默认 Colors.White
   final Color borderColor;
   /// 裁剪区域开始变化时的回调
   final Function cropRectUpdateStart;
   /// 裁剪区域变化时的回调
-  /// - 可用于初始生成裁剪区域，以及手势触发的回调
+  /// 
+  /// 可用于初始生成裁剪区域，以及手势触发的回调
   final _CropRectUpdate cropRectUpdate;
   /// 裁剪区域停止变化时的回调函数，可以获得最终裁剪区域
-  /// - 返回值 `Rect rect` 为裁剪区域在素材上的比例
-  /// - `rect`的LTRB值均为0到1的`double`值，代表在本轴上的百分比位置
-  /// - 这个百分比只是LTRB分别相对于原素材宽高的百分比，各个LTRB之间这个**百分比值没有联系**
-  /// - LTRB的绝对值有比例关系，比例等于裁剪比例
+  /// 
+  /// 返回值 `Rect rect` 为裁剪区域在素材上的比例
+  /// 
+  /// `rect`的LTRB值均为0到1的`double`值，代表在本轴上的百分比位置
+  /// 
+  /// 这个百分比只是LTRB分别相对于原素材宽高的百分比，各个LTRB之间这个**百分比值没有联系**
+  /// 
+  /// LTRB的绝对值有比例关系，比例等于裁剪比例
   final _CropRectUpdate cropRectUpdateEnd;
   
   /// ### 裁剪素材组件 
@@ -124,8 +135,10 @@ class _CropBoxState extends State<CropBox> {
   Offset _originPos = Offset(0, 0);
 
   /// 裁剪结果数据
-  /// - LTRB值均为0到1的double值，代表在本轴上的百分比位置
-  /// - 包含了缩放尺寸，需要自行判断计算
+  /// 
+  /// LTRB值均为0到1的double值，代表在本轴上的百分比位置
+  /// 
+  /// 包含了缩放尺寸，需要自行判断计算
   Rect resultRect;
 
   // 是否绘制完毕
@@ -139,7 +152,8 @@ class _CropBoxState extends State<CropBox> {
   }
 
   /// 初始化裁剪
-  /// - 返回值 bool true表示初始化成功 false表示失败
+  /// 
+  /// 返回值 bool true表示初始化成功 false表示失败
   bool initCrop() {
     caculateCropBoxSize();
     caculateInitClipSize();
@@ -148,8 +162,10 @@ class _CropBoxState extends State<CropBox> {
   }
 
   /// 计算canvas绘制裁剪框的位置
-  /// - 计算裁剪框位置
-  /// - 计算中心点位置
+  /// 
+  /// 计算裁剪框位置
+  /// 
+  /// 计算中心点位置
   void caculateCropBoxSize() {
     // 中心坐标点用组件的中心点
     _originPos = Offset(_containerWidth / 2, (_containerHeight) / 2);
@@ -161,7 +177,8 @@ class _CropBoxState extends State<CropBox> {
   }
 
   /// 计算初始素材尺寸
-  /// - 需要计算素材宽高比，判断横向还是纵向拉满
+  /// 
+  /// 需要计算素材宽高比，判断横向还是纵向拉满
   void caculateInitClipSize() {
     double _realWidth = 0;
     double _realHeight = 0;
@@ -182,7 +199,8 @@ class _CropBoxState extends State<CropBox> {
   }
 
   /// 计算初始素材摆放位置
-  /// - 根据初始素材尺寸以及scale确定初始位置
+  /// 
+  /// 根据初始素材尺寸以及scale确定初始位置
   void caculateInitClipPosition() {
     // 根据scale和传入的裁剪区域确定具体位置
     Rect _clipRect;
@@ -223,7 +241,8 @@ class _CropBoxState extends State<CropBox> {
   }
 
   /// 判断是否超出界限
-  /// - 如果超出界限，则自动修正位置
+  /// 
+  /// 如果超出界限，则自动修正位置
   void resizeRange() {
     Rect _result = transPointToCropArea();
     double left = _result.left;
@@ -309,8 +328,11 @@ class _CropBoxState extends State<CropBox> {
   }
 
   /// 根据填充物最大宽高和填充物比例，计算填充物实际宽高
-  /// - Size _maxSize 最大宽高
-  /// - Size _ratioSize 宽高比尺寸
+  /// 
+  /// Size [_maxSize] 最大宽高
+  /// 
+  /// Size [_ratioSize] 宽高比尺寸
+  /// 
   Size canculateInnerBoxRealSize(Size _maxSize, Size _ratioSize) {
     double _realWidth = 0;
     double _realHeight = 0;

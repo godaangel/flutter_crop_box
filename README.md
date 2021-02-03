@@ -1,40 +1,48 @@
-> 背景：为啥要开发这个组件呢？因为目前在我们的flutter app中，用到了视频合成技术，这里就涉及到视频或者图片素材的裁剪，目前市面上普遍的组件都是基于图片的，并且基本上都是使用canvas进行渲染和裁剪，不太符合我们的业务需求，所以要自己开发一个裁剪组件。
+> Background: why develop this component? At present, video synthesis technology is used in our flitter app, which involves the clipping of video or picture materials. At present, the common components in the market are based on pictures, and basically use canvas for rendering and clipping, which does not meet our business needs, so we need to develop a clipping component ourselves.
 
-## 效果展示
+[中文文档](https://github.com/godaangel/flutter_crop_box/blob/master/doc/README_ZH.md)
+
+## Demo
+
 ![](https://github.com/godaangel/flutter_crop_box/blob/master/gif/5e941f8d-39a2-45da-9c8c-9eb2f6513498.gif)
 
-## 需求分析 
-在移动端，基本都是用手势操作，所以在需求设计之初，就考虑到手势的习惯，以及参考大部分编辑工具，定义出了以下几个需求点：
-- 裁剪框**固定**在屏幕上的一个位置，通过**单指拖动，双指缩放**的形式调整素材位置和大小，来框定裁剪范围
-- 素材的最小边不能小于裁剪框上与其对应的边，即裁剪框**只能相对在素材范围内移动**
-- 支持素材的类型包含**图片和视频**
+## Demand analysis
 
-## 参数设计
+At the beginning of requirement design, considering the habit of gesture and referring to most editing tools, the following requirements are defined:
 
-| 参数名 | 类型 | 描述 | 默认值 |
+- The clipping Box **is fixed** in a position on the screen. The position and size of the material can be adjusted by **dragging with one finger and zooming with two fingers** to frame the clipping range
+
+- The minimum edge of the material cannot be less than the corresponding edge of the clipping box, that is, the clipping Box **can only move relatively within the range of the material**
+
+- The types of supporting materials include **pictures and videos**
+
+## Parameter
+
+| name | type | desc | default |
 | --- | --- | --- | --- |
-| cropRect | Rect | 初始裁剪区域，如果不填，默认会填充并居中，表现形式类似cover | - |
-| clipSize | Size | 待裁剪素材的尺寸 | 必填 |
-| cropRatio | Size | 裁剪框比例，默认`16:9` | `Size(16, 9)` |
-| child | Widget | 待裁剪素材 | 必填 |
-| maxCropSize | Size | 裁剪框当前比例下最大宽高，主要是用于需要主动调整裁剪框大小时使用 如果没有特殊需求，不需要配置 | 根据父组件计算 |
-| maxScale | Double | 允许放大的最大尺寸 | `10.0` |
-| borderColor | Color | 裁剪框颜色 | `Colors.White` |
-| cropRectUpdateStart | Function | 裁剪区域开始变化时的回调 | - |
-| cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |
-| cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
+| cropRect | Rect | If you do not fill in the initial clipping region, it will be filled and centered by default, which is similar to cover | - |
+| clipSize | Size | Size of material to be cut | Required |
+| cropRatio | Size | Crop box scale, default`16:9` | `Size(16, 9)` |
+| child | Widget | Material to be cut | Required |
+| maxCropSize | Size | The maximum width and height of the current scale of the clipping box is mainly used when the size of the clipping box needs to be adjusted actively. If there is no special requirement, it does not need to be configured | Calculate based on parent component |
+| maxScale | Double | Maximum size allowed to enlarge | `10.0` |
+| borderColor | Color | Crop box border color | `Colors.White` |
+| cropRectUpdateStart | Function | Callback when crop region begins to change | - |
+| cropRectUpdate | Function(Rect rect) | Callback when clipping region changes | - |
+| cropRectUpdateEnd | Function(Rect rect) | Callback when clipping region end | Required |
 
-## 使用Demo
-> 可参考 `git` 的 `example`，可以直接运行
+## Demo code
 
-#### git引入
+> Can see `example` in github
+
+#### git
 ```yaml
   crop_box:
     git:
       url: https://github.com/godaangel/flutter_crop_box.git
 ```
 
-#### pub.dev引入
+#### pub.dev
 ```yaml
   crop_box: ^0.1.0
 ```
@@ -52,10 +60,10 @@ CropBox(
   clipSize: Size(200, 315),
   cropRatio: Size(16, 9),
   cropRectUpdateEnd: (rect) {
-    print("裁剪区域最终确定 $rect");
+    print("rect final $rect");
   },
   cropRectUpdate: (rect) {
-    print("裁剪区域变化 $rect");
+    print("rect change $rect");
   },
   child: Image.network(
   "https://img1.maka.im/materialStore/beijingshejia/tupianbeijinga/9/M_7TNT6NIM/M_7TNT6NIM_v1.jpg",
@@ -79,7 +87,10 @@ CropBox(
 
 ## TODO
 
-* [x] 动态变换裁剪框比例
-* [ ] 优化边界计算代码
-* [ ] 支持圆角裁剪框绘制
-* [ ] 支持旋转
+* [x] Dynamically transform crop box scale
+
+* [ ] Optimize boundary calculation code
+
+* [ ] Support the drawing of fillet clipping box
+
+* [ ] Support rotation
