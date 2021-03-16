@@ -30,6 +30,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
 | cropRectUpdateStart | Function | Callback when crop region begins to change | - |
 | cropRectUpdate | Function(Rect rect) | Callback when clipping region changes | - |
 | cropRectUpdateEnd | Function(Rect rect) | Callback when clipping region end | Required |
+| cropBoxType | CropBoxType | Crop box style, default square, can be changed to circle | CropBoxType.Square |
 
 ## Demo code
 
@@ -44,7 +45,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
 
 #### pub.dev
 ```yaml
-  crop_box: ^0.1.0
+  crop_box: ^0.1.2
 ```
 
 #### Code
@@ -88,6 +89,8 @@ CropBox(
 ## TODO
 
 * [x] Dynamically transform crop box scale
+
+* [x] Support circle clipping box drawing
 
 * [ ] Optimize boundary calculation code
 

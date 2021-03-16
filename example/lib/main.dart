@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // cropRect: Rect.fromLTRB(1 - 0.4083, 0.162, 1, 0.3078), // 2.4倍 模拟随机位置
                 // cropRect: Rect.fromLTRB(0, 0, 0.4083, 0.1457), //2.4倍，都是0,0
                 // cropRect: Rect.fromLTRB(0, 0, 1, 0.3572), // 1倍
+                // cropBoxType: CropBoxType.Circle,
                 cropRect: _cropRect,
                 clipSize: _clipSize,
                 maxCropSize: _maxCropSize,

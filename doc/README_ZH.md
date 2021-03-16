@@ -23,6 +23,7 @@
 | cropRectUpdateStart | Function | 裁剪区域开始变化时的回调 | - |
 | cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |
 | cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
+| cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形 | CropBoxType.Square |
 
 ## 使用Demo
 > 可参考 `git` 的 `example`，可以直接运行
@@ -36,7 +37,7 @@
 
 #### pub.dev引入
 ```yaml
-  crop_box: ^0.1.0
+  crop_box: ^0.1.2
 ```
 
 #### 代码
@@ -48,6 +49,7 @@ import 'package:crop_box/crop_box.dart';
 CropBox(
   // cropRect: Rect.fromLTRB(1 - 0.4083, 0.162, 1, 0.3078), // 2.4倍 随机位置
   // cropRect: Rect.fromLTRB(0, 0, 0.4083, 0.1457), //2.4倍，都是0,0
+  // cropBoxType: CropBoxType.Circle,
   cropRect: Rect.fromLTRB(0, 0, 1, 0.3572), // 1倍
   clipSize: Size(200, 315),
   cropRatio: Size(16, 9),
@@ -80,6 +82,7 @@ CropBox(
 ## TODO
 
 * [x] 动态变换裁剪框比例
+* [x] 支持圆形裁剪框绘制
 * [ ] 优化边界计算代码
 * [ ] 支持圆角裁剪框绘制
 * [ ] 支持旋转
