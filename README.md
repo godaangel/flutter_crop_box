@@ -30,7 +30,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
 | cropRectUpdateStart | Function | Callback when crop region begins to change | - |
 | cropRectUpdate | Function(Rect rect) | Callback when clipping region changes | - |
 | cropRectUpdateEnd | Function(Rect rect) | Callback when clipping region end | Required |
-| cropBoxType | CropBoxType | Crop box style, default square, can be changed to circle | CropBoxType.Square |
+| cropBoxType | CropBoxType | Crop box style, default square, can be changed to circle. If it is a circle, the value set by `CropRatio` will be invalid and forced to `1:1` | CropBoxType.Square |
 
 ## Demo code
 

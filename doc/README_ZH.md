@@ -23,7 +23,7 @@
 | cropRectUpdateStart | Function | 裁剪区域开始变化时的回调 | - |
 | cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |
 | cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
-| cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形 | CropBoxType.Square |
+| cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形，如果是圆形，则`cropRatio`设置的值将失效，强制变为`1:1` | CropBoxType.Square |
 
 ## 使用Demo
 > 可参考 `git` 的 `example`，可以直接运行
