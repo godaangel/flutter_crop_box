@@ -9,3 +9,7 @@
 ## [0.1.2] - 2021-03-16.
 
 * add Circle CropBox. Now you can use `cropBoxType: CropBoxType.Circle` to change the UI of CropBox，And the return params is also `Rect` type;
+
+## [0.1.3] - 2021-03-22.
+
+* add `borderRadius` `borderWidth` and `needInnerBorder`;

@@ -20,6 +20,10 @@
 | maxCropSize | Size | 裁剪框当前比例下最大宽高，主要是用于需要主动调整裁剪框大小时使用 如果没有特殊需求，不需要配置 | 根据父组件计算 |
 | maxScale | Double | 允许放大的最大尺寸 | `10.0` |
 | borderColor | Color | 裁剪框颜色 | `Colors.White` |
+| borderRadius | Radius | 方形模式下的边框圆角 | `Radius.circular(0)` |
+| borderWidth | Double | 边框宽度 | `2` |
+| needInnerBorder | bool | 方形模式下是否需要内边框修饰（如果有圆角，则不显示） | `false` |
+| cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
 | cropRectUpdateStart | Function | 裁剪区域开始变化时的回调 | - |
 | cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |
 | cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
@@ -37,10 +41,11 @@
 
 #### pub.dev引入
 ```yaml
-  crop_box: ^0.1.2
+  crop_box: ^0.1.3
 ```
 
 #### 代码
+> 更多属性参考`example`代码
 ```dart
 import 'package:crop_box/crop_box.dart';
 
@@ -84,5 +89,5 @@ CropBox(
 * [x] 动态变换裁剪框比例
 * [x] 支持圆形裁剪框绘制
 * [ ] 优化边界计算代码
-* [ ] 支持圆角裁剪框绘制
+* [x] 支持圆角裁剪框绘制
 * [ ] 支持旋转

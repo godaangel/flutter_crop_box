@@ -63,10 +63,23 @@ class CropBox extends StatefulWidget {
   /// [cropBoxType] 有两种类型
   /// 
   /// [CropBoxType.Square] 表示方形框
-  /// [CropBoxType.Circle] 表示圆形框，圆形裁剪框模式下[cropRatio]会强制为`1:1`
+  /// [CropBoxType.Circle] 表示圆形框，圆形裁剪框模式下[cropRatio]会强制为`1:1`，且`needInnerBorder`和`borderRadius`不生效
   /// 
   /// [cropBoxType] 默认值为 [CropBoxType.Square]
   final CropBoxType cropBoxType;
+
+  /// 是否需要内边框
+  /// 
+  /// default [false]
+  final bool needInnerBorder;
+
+  /// 方形模式下，边框的圆角
+  final Radius borderRadius;
+
+  /// 边框宽度
+  /// 
+  /// 默认 [2]
+  final double borderWidth;
   
   /// ### 裁剪素材组件 
   /// 
@@ -107,7 +120,7 @@ class CropBox extends StatefulWidget {
   /// )
   /// ```
   /// {@end-tool}
-  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.borderColor, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square});
+  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.borderColor, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.borderRadius, this.borderWidth = 2});
 
   @override
   _CropBoxState createState() => _CropBoxState();
@@ -443,7 +456,9 @@ class _CropBoxState extends State<CropBox> {
                     ),
                     CustomPaint(
                       size: Size(double.infinity, double.infinity),
-                      painter: widget.cropBoxType == CropBoxType.Circle ? DrawCircleLight(clipRect: _cropBoxRealRect, borderColor: Theme?.of(context)?.primaryColor ?? widget.borderColor, centerPoint: _originPos) : DrawRectLight(clipRect: _cropBoxRealRect, borderColor: Theme?.of(context)?.primaryColor ?? widget.borderColor),
+                      painter: widget.cropBoxType == CropBoxType.Circle ? 
+                        DrawCircleLight(clipRect: _cropBoxRealRect, borderColor: widget.borderColor ?? Theme?.of(context)?.primaryColor, centerPoint: _originPos, borderWidth: widget.borderWidth) 
+                        : DrawRectLight(clipRect: _cropBoxRealRect, borderColor: widget.borderColor ?? Theme?.of(context)?.primaryColor, needInnerBorder: widget.needInnerBorder, borderWidth: widget.borderWidth, borderRadius: widget.borderRadius),
                     ),
                   ],
                 ): Center(
@@ -493,22 +508,39 @@ class _CropBoxState extends State<CropBox> {
 class DrawRectLight extends CustomPainter {
   final Rect clipRect;
   final Color borderColor;
-  DrawRectLight({@required this.clipRect, this.borderColor});
+  final bool needInnerBorder;
+  final Radius borderRadius;
+  final double borderWidth;
+  DrawRectLight({@required this.clipRect, this.borderColor, this.needInnerBorder, this.borderRadius, this.borderWidth = 2});
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();
-    double _storkeWidth = 2;
+    double _storkeWidth = borderWidth;
+    Radius _borderRadius = borderRadius != null ? borderRadius : Radius.circular(0);
+    RRect _rrect = RRect.fromRectAndRadius(clipRect, _borderRadius);
+    RRect _borderRRect = RRect.fromRectAndRadius(Rect.fromLTWH(clipRect.left, clipRect.top - _storkeWidth / 2, clipRect.width, clipRect.height + _storkeWidth), _borderRadius);
 
     paint
       ..style = PaintingStyle.fill
       ..color = Color.fromRGBO(20, 20, 20, 0.6);
     canvas.save();
-    // 绘制一个反选框（透明部分）
-    canvas.clipRect(clipRect, clipOp: ClipOp.difference);
-    canvas.save();
-    // 绘制一个遮罩层，被反选区域裁剪
-    canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), paint);
+    // // 绘制一个反选框（透明部分）
+    // canvas.clipRect(clipRect, clipOp: ClipOp.difference);
+    // canvas.save();
+    // // 绘制一个遮罩层，被反选区域裁剪
+    // canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), paint);
+    // canvas.restore();
+
+    // 绘制一个圆形反选框和背景遮罩（透明部分）
+    Path path = Path.combine(
+      PathOperation.difference,
+      Path()..addRect(Rect.fromLTRB(0, 0, size.width, size.height)),
+      Path()
+        ..addRRect(_rrect)
+        ..close(),
+    );
+    canvas.drawPath(path, paint);
     canvas.restore();
 
     // 绘制主色调边框
@@ -516,19 +548,22 @@ class DrawRectLight extends CustomPainter {
       ..color = borderColor ?? Colors.white
       ..style = PaintingStyle.stroke
       ..strokeWidth = _storkeWidth;
-    canvas.restore();
-    canvas.drawRect(Rect.fromLTWH(clipRect.left, clipRect.top - _storkeWidth / 2, clipRect.width, clipRect.height + _storkeWidth), paint);
+      
+    canvas.drawRRect(_borderRRect, paint);
 
-    // 绘制边框内的样式
-    paint.style = PaintingStyle.fill;
-    canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top - _storkeWidth, 45.44 / 2, 7.57 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top - _storkeWidth, 7.57 / 2, 45.44 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top - _storkeWidth, -45.44 / 2, 7.57 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top - _storkeWidth, -7.57 / 2, 45.44 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, 45.44 / 2, -7.57 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, 7.57 / 2, -45.44 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, -45.44 / 2, -7.57 / 2), paint);
-    canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, -7.57 / 2, -45.44 / 2), paint);
+    if(needInnerBorder) {
+      // 绘制边框内的样式
+      paint.style = PaintingStyle.fill;
+      canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top - _storkeWidth, 45.44 / 2, 7.57 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top - _storkeWidth, 7.57 / 2, 45.44 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top - _storkeWidth, -45.44 / 2, 7.57 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top - _storkeWidth, -7.57 / 2, 45.44 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, 45.44 / 2, -7.57 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left - _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, 7.57 / 2, -45.44 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, -45.44 / 2, -7.57 / 2), paint);
+      canvas.drawRect(Rect.fromLTWH(clipRect.left + clipRect.width + _storkeWidth / 2, clipRect.top + clipRect.height + _storkeWidth, -7.57 / 2, -45.44 / 2), paint);
+    }
+    
   }
 
   @override
@@ -539,12 +574,13 @@ class DrawCircleLight extends CustomPainter {
   final Rect clipRect;
   final Color borderColor;
   final Offset centerPoint;
-  DrawCircleLight({@required this.clipRect, this.borderColor, this.centerPoint});
+  final double borderWidth;
+  DrawCircleLight({@required this.clipRect, this.borderColor, this.centerPoint, this.borderWidth = 2});
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();
-    double _storkeWidth = 2;
+    double _storkeWidth = borderWidth;
     double _radius = clipRect.width / 2;
     paint
       ..style = PaintingStyle.fill

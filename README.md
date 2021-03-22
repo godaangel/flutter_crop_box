@@ -27,6 +27,9 @@ At the beginning of requirement design, considering the habit of gesture and ref
 | maxCropSize | Size | The maximum width and height of the current scale of the clipping box is mainly used when the size of the clipping box needs to be adjusted actively. If there is no special requirement, it does not need to be configured | Calculate based on parent component |
 | maxScale | Double | Maximum size allowed to enlarge | `10.0` |
 | borderColor | Color | Crop box border color | `Colors.White` |
+| borderRadius | Radius | Rounded corners of the border in square mode | `Radius.circular(0)` |
+| borderWidth | Double | Border width | `2` |
+| needInnerBorder | bool | Whether the inner border decoration is required in the square mode (if there are rounded corners, it will not be displayed) | `false` |
 | cropRectUpdateStart | Function | Callback when crop region begins to change | - |
 | cropRectUpdate | Function(Rect rect) | Callback when clipping region changes | - |
 | cropRectUpdateEnd | Function(Rect rect) | Callback when clipping region end | Required |
@@ -45,7 +48,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
 
 #### pub.dev
 ```yaml
-  crop_box: ^0.1.2
+  crop_box: ^0.1.3
 ```
 
 #### Code
@@ -94,6 +97,6 @@ CropBox(
 
 * [ ] Optimize boundary calculation code
 
-* [ ] Support the drawing of fillet clipping box
+* [x] Support the drawing of fillet clipping box
 
 * [ ] Support rotation

@@ -61,10 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 // cropRect: Rect.fromLTRB(0, 0, 0.4083, 0.1457), //2.4倍，都是0,0
                 // cropRect: Rect.fromLTRB(0, 0, 1, 0.3572), // 1倍
                 // cropBoxType: CropBoxType.Circle,
+                // borderColor: Colors.white,
                 cropRect: _cropRect,
                 clipSize: _clipSize,
                 maxCropSize: _maxCropSize,
                 cropRatio: _cropRatio,
+                borderRadius: Radius.circular(5),
                 cropRectUpdateEnd: (rect) {
                   _resultRect = rect;
                   print("裁剪区域最终确定 $rect");
@@ -102,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: MediaQuery.of(context).padding.bottom,
               ),
               child: Container(
-                height: 240.w,
+                height: 250.w,
                 padding: EdgeInsets.all(16.w),
                 child: Row(
                   children: [
