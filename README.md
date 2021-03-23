@@ -48,7 +48,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
 
 #### pub.dev
 ```yaml
-  crop_box: ^0.1.3
+  crop_box: ^0.1.4
 ```
 
 #### Code
@@ -100,3 +100,5 @@ CropBox(
 * [x] Support the drawing of fillet clipping box
 
 * [ ] Support rotation
+
+* [x] Support Gridlines

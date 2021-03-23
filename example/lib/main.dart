@@ -62,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // cropRect: Rect.fromLTRB(0, 0, 1, 0.3572), // 1倍
                 // cropBoxType: CropBoxType.Circle,
                 // borderColor: Colors.white,
+                gridLine: GridLine(),
                 cropRect: _cropRect,
                 clipSize: _clipSize,
                 maxCropSize: _maxCropSize,

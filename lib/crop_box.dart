@@ -11,6 +11,19 @@ enum CropBoxType {
   Circle
 }
 
+class GridLine {
+  /// 网格线颜色
+  /// 默认 `Colors.white`
+  Color color;
+  /// 网格线宽度
+  double width;
+  /// 网格线padding
+  EdgeInsets padding;
+
+  /// 网格线
+  GridLine({this.color = Colors.white, this.width = 0.5, this.padding});
+}
+
 /// 回调函数的类型定义
 typedef _CropRectUpdate = void Function(Rect rect);
 class CropBox extends StatefulWidget {
@@ -80,6 +93,9 @@ class CropBox extends StatefulWidget {
   /// 
   /// 默认 [2]
   final double borderWidth;
+
+  /// 网格线
+  final GridLine gridLine;
   
   /// ### 裁剪素材组件 
   /// 
@@ -120,7 +136,7 @@ class CropBox extends StatefulWidget {
   /// )
   /// ```
   /// {@end-tool}
-  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.borderColor, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.borderRadius, this.borderWidth = 2});
+  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.borderColor, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.borderRadius, this.borderWidth = 2, this.gridLine});
 
   @override
   _CropBoxState createState() => _CropBoxState();
@@ -458,7 +474,7 @@ class _CropBoxState extends State<CropBox> {
                       size: Size(double.infinity, double.infinity),
                       painter: widget.cropBoxType == CropBoxType.Circle ? 
                         DrawCircleLight(clipRect: _cropBoxRealRect, borderColor: widget.borderColor ?? Theme?.of(context)?.primaryColor, centerPoint: _originPos, borderWidth: widget.borderWidth) 
-                        : DrawRectLight(clipRect: _cropBoxRealRect, borderColor: widget.borderColor ?? Theme?.of(context)?.primaryColor, needInnerBorder: widget.needInnerBorder, borderWidth: widget.borderWidth, borderRadius: widget.borderRadius),
+                        : DrawRectLight(clipRect: _cropBoxRealRect, borderColor: widget.borderColor ?? Theme?.of(context)?.primaryColor, needInnerBorder: widget.needInnerBorder, borderWidth: widget.borderWidth, borderRadius: widget.borderRadius, gridLine: widget.gridLine),
                     ),
                   ],
                 ): Center(
@@ -511,7 +527,8 @@ class DrawRectLight extends CustomPainter {
   final bool needInnerBorder;
   final Radius borderRadius;
   final double borderWidth;
-  DrawRectLight({@required this.clipRect, this.borderColor, this.needInnerBorder, this.borderRadius, this.borderWidth = 2});
+  final GridLine gridLine;
+  DrawRectLight({@required this.clipRect, this.borderColor, this.needInnerBorder, this.borderRadius, this.borderWidth = 2, this.gridLine});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -550,6 +567,30 @@ class DrawRectLight extends CustomPainter {
       ..strokeWidth = _storkeWidth;
       
     canvas.drawRRect(_borderRRect, paint);
+
+    if(gridLine != null) {
+      canvas.save();
+      // 绘制主色调边框
+      paint
+        ..color = gridLine.color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = gridLine.width;
+      Path gridLinePath = new Path();
+
+      EdgeInsets _padding = gridLine.padding ?? EdgeInsets.all(0);
+
+      for(int i = 1; i < 3; i ++) {
+        // 绘制横线
+        gridLinePath.moveTo(((clipRect.width / 3) * i + clipRect.left - gridLine.width / 2), clipRect.top + _padding.top);
+        gridLinePath.lineTo(((clipRect.width / 3) * i + clipRect.left - gridLine.width / 2), clipRect.top + clipRect.height - _padding.bottom);
+
+        // 绘制竖线
+        gridLinePath.moveTo(clipRect.left + _padding.left, ((clipRect.height / 3) * i + clipRect.top - gridLine.width / 2));
+        gridLinePath.lineTo(clipRect.left + clipRect.width - _padding.right, ((clipRect.height / 3) * i + clipRect.top - gridLine.width / 2));
+      }
+      canvas.drawPath(gridLinePath, paint);
+      canvas.restore();
+    }
 
     if(needInnerBorder) {
       // 绘制边框内的样式

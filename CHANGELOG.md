@@ -13,3 +13,7 @@
 ## [0.1.3] - 2021-03-22.
 
 * add `borderRadius` `borderWidth` and `needInnerBorder`;
+
+## [0.1.4] - 2021-03-23.
+
+* add `gridLine` property;

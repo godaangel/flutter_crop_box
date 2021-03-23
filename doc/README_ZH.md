@@ -28,6 +28,7 @@
 | cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |
 | cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
 | cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形，如果是圆形，则`cropRatio`设置的值将失效，强制变为`1:1` | CropBoxType.Square |
+| gridLine | GridLine | 裁剪网格线 | - |
 
 ## 使用Demo
 > 可参考 `git` 的 `example`，可以直接运行
@@ -41,7 +42,7 @@
 
 #### pub.dev引入
 ```yaml
-  crop_box: ^0.1.3
+  crop_box: ^0.1.4
 ```
 
 #### 代码
@@ -91,3 +92,4 @@ CropBox(
 * [ ] 优化边界计算代码
 * [x] 支持圆角裁剪框绘制
 * [ ] 支持旋转
+* [x] 支持网格线
