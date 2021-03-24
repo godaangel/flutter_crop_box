@@ -19,16 +19,13 @@
 | child | Widget | 待裁剪素材 | 必填 |
 | maxCropSize | Size | 裁剪框当前比例下最大宽高，主要是用于需要主动调整裁剪框大小时使用 如果没有特殊需求，不需要配置 | 根据父组件计算 |
 | maxScale | Double | 允许放大的最大尺寸 | `10.0` |
-| borderColor | Color | 裁剪框颜色 | `Colors.White` |
-| borderRadius | Radius | 方形模式下的边框圆角 | `Radius.circular(0)` |
-| borderWidth | Double | 边框宽度 | `2` |
 | needInnerBorder | bool | 方形模式下是否需要内边框修饰（如果有圆角，则不显示） | `false` |
-| cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
+| cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形，如果是圆形，则`cropRatio`设置的值将失效，强制变为`1:1` | CropBoxType.Square |
+| gridLine | GridLine | 裁剪网格线 | - |
+| cropBoxBorder | CropBoxBorder | 裁剪框样式，包含颜色、宽度和圆角信息 | `cropBoxBorder.width = 2` `cropBoxBorder.color = Colors.white` `cropBoxBorder.radius = Radius.circular(0)` |
 | cropRectUpdateStart | Function | 裁剪区域开始变化时的回调 | - |
 | cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |
 | cropRectUpdateEnd | Function(Rect rect) | 返回 | 必填 |
-| cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形，如果是圆形，则`cropRatio`设置的值将失效，强制变为`1:1` | CropBoxType.Square |
-| gridLine | GridLine | 裁剪网格线 | - |
 
 ## 使用Demo
 > 可参考 `git` 的 `example`，可以直接运行
@@ -42,7 +39,7 @@
 
 #### pub.dev引入
 ```yaml
-  crop_box: ^0.1.4
+  crop_box: ^0.1.5
 ```
 
 #### 代码

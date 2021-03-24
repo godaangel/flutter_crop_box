@@ -67,7 +67,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 clipSize: _clipSize,
                 maxCropSize: _maxCropSize,
                 cropRatio: _cropRatio,
-                borderRadius: Radius.circular(5),
+                cropBoxBorder: CropBoxBorder(
+                  color: Colors.white,
+                  radius: Radius.circular(5),
+                ),
                 cropRectUpdateEnd: (rect) {
                   _resultRect = rect;
                   print("裁剪区域最终确定 $rect");

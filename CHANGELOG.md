@@ -17,3 +17,7 @@
 ## [0.1.4] - 2021-03-23.
 
 * add `gridLine` property;
+
+## [0.1.5] - 2021-03-24.
+
+* add `CropBoxBorder cropBoxBorder` property, remove `borderColor` `borderRadius` `borderWidth` properties;
