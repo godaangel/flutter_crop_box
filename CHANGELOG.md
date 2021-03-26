@@ -25,3 +25,7 @@
 ## [0.1.6] - 2021-03-26.
 
 * add `backgroundColor` property;
+
+## [0.1.7] - 2021-03-26.
+
+* change mask color to `rgba(0,0,0,0.5)`;

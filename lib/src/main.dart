@@ -527,7 +527,7 @@ class DrawRectLight extends CustomPainter {
 
     paint
       ..style = PaintingStyle.fill
-      ..color = Color.fromRGBO(20, 20, 20, 0.6);
+      ..color = Color.fromRGBO(0, 0, 0, 0.5);
     canvas.save();
 
     // 绘制一个圆形反选框和背景遮罩（透明部分）
@@ -605,7 +605,7 @@ class DrawCircleLight extends CustomPainter {
     double _radius = clipRect.width / 2;
     paint
       ..style = PaintingStyle.fill
-      ..color = Color.fromRGBO(20, 20, 20, 0.6);
+      ..color = Color.fromRGBO(0, 0, 0, 0.5);
     canvas.save();
     // 绘制一个圆形反选框和背景遮罩（透明部分）
     Path path = Path.combine(
