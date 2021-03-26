@@ -21,3 +21,7 @@
 ## [0.1.5] - 2021-03-24.
 
 * add `CropBoxBorder cropBoxBorder` property, remove `borderColor` `borderRadius` `borderWidth` properties;
+
+## [0.1.6] - 2021-03-26.
+
+* add `backgroundColor` property;

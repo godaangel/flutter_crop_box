@@ -80,6 +80,11 @@ class CropBox extends StatefulWidget {
   /// 
   /// 包含颜色、宽度、圆角等信息
   final CropBoxBorder cropBoxBorder;
+
+  /// 裁剪框背景颜色
+  /// 
+  /// default [Color(0xff141414)]
+  final Color backgroundColor;
   
   /// ### 裁剪素材组件 
   /// 
@@ -120,7 +125,7 @@ class CropBox extends StatefulWidget {
   /// )
   /// ```
   /// {@end-tool}
-  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder});
+  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder, this.backgroundColor});
 
   @override
   _CropBoxState createState() => _CropBoxState();
@@ -428,7 +433,7 @@ class _CropBoxState extends State<CropBox> {
       builder: (_, snapshot) {
         return ClipRect(
           child: Container(
-            color: Color(0xff141414),
+            color: widget.backgroundColor ?? Color(0xff141414),
             child: GestureDetector(
               onScaleStart: _handleScaleStart,
               onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
