@@ -29,3 +29,7 @@
 ## [0.1.7] - 2021-03-26.
 
 * change mask color to `rgba(0,0,0,0.5)`;
+
+## [0.1.8] - 2021-04-03.
+
+* add `ImageCrop.getResult` to get real image crop result Uint8List;
