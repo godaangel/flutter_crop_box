@@ -5,42 +5,42 @@ packages:
     dependency: transitive
     description:
       name: async
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.0-nullsafety.1"
   boolean_selector:
     dependency: transitive
     description:
       name: boolean_selector
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0-nullsafety.1"
   characters:
     dependency: transitive
     description:
       name: characters
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0-nullsafety.3"
   charcode:
     dependency: transitive
     description:
       name: charcode
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
   clock:
     dependency: transitive
     description:
       name: clock
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0-nullsafety.1"
   collection:
     dependency: transitive
     description:
       name: collection
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0-nullsafety.3"
   crop_box:
@@ -49,19 +49,19 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.1.8"
   cupertino_icons:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
       name: fake_async
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
   flutter:
@@ -73,33 +73,61 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_screenutil
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2+3"
+    version: "4.0.2+2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  hashcodes:
+    dependency: transitive
+    description:
+      name: hashcodes
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
+  image_editor:
+    dependency: transitive
+    description:
+      name: image_editor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.3"
+  image_gallery_saver:
+    dependency: "direct main"
+    description:
+      name: image_gallery_saver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.8"
+  image_size_getter:
+    dependency: transitive
+    description:
+      name: image_size_getter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   matcher:
     dependency: transitive
     description:
       name: matcher
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.10-nullsafety.1"
   meta:
     dependency: transitive
     description:
       name: meta
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.3"
   path:
     dependency: transitive
     description:
       name: path
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.1"
   sky_engine:
@@ -111,56 +139,56 @@ packages:
     dependency: transitive
     description:
       name: source_span
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.2"
   stack_trace:
     dependency: transitive
     description:
       name: stack_trace
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.1"
   stream_channel:
     dependency: transitive
     description:
       name: stream_channel
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0-nullsafety.1"
   string_scanner:
     dependency: transitive
     description:
       name: string_scanner
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0-nullsafety.1"
   term_glyph:
     dependency: transitive
     description:
       name: term_glyph
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
   test_api:
     dependency: transitive
     description:
       name: test_api
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.19-nullsafety.2"
   typed_data:
     dependency: transitive
     description:
       name: typed_data
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.3"
   vector_math:
     dependency: transitive
     description:
       name: vector_math
-      url: "https://mirrors.cloud.tencent.com/dart-pub"
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0-nullsafety.3"
 sdks:

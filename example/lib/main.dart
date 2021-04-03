@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
+import 'package:example/image_result_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:ui';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -42,9 +46,15 @@ class _MyHomePageState extends State<MyHomePage> {
   /// 裁剪比例
   Size _cropRatio = Size(16, 9);
   /// 素材尺寸
-  Size _clipSize = Size(200, 315);
+  Size _clipDemoSize = Size(200, 315);
+  // Size _clipDemoSize = Size(354, 630);
   /// 裁剪区域
   Rect _cropRect;
+
+  String imageUrl = "https://img1.maka.im/materialStore/beijingshejia/tupianbeijinga/9/M_7TNT6NIM/M_7TNT6NIM_v1.jpg";
+  // "http://wxapp.tc.qq.com/251/20350/stodownload?filekey=30340201010420301e020200fb040253480410ee9012a80919033b1e105adda317213902025475040d00000004627466730000000131&storeid=323032313033323931373031333330303061396437336666666234383164653730353566363430303030303066623030303034663765&adaptivelytrans=0&bizid=1023&dotrans=0&hy=SH&m=ee9012a80919033b1e105adda3172139";
+
+  bool exportLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // borderColor: Colors.white,
                 gridLine: GridLine(),
                 cropRect: _cropRect,
-                clipSize: _clipSize,
+                clipSize: _clipDemoSize,
                 maxCropSize: _maxCropSize,
                 cropRatio: _cropRatio,
                 cropBoxBorder: CropBoxBorder(
@@ -82,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {});
                 },
                 child: Image.network(
-                  "https://img1.maka.im/materialStore/beijingshejia/tupianbeijinga/9/M_7TNT6NIM/M_7TNT6NIM_v1.jpg",
+                  imageUrl,
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
@@ -194,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           CupertinoButton(
                             color: Colors.blue,
                             child: Text(
-                              "16:9",
+                              exportLoading ? "Exporting" : "Export",
                               style: TextStyle(
                                 fontFamily: "PingFang SC",
                                 fontSize: 28.sp,
@@ -202,10 +212,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: exportLoading ? null : () async {
                               setState(() {
-                                _cropRatio = Size(16, 9);
+                                exportLoading = true;
                               });
+
+                              /// get origin image uint8List
+                              Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imageUrl))
+                                .load(imageUrl))
+                                .buffer
+                                .asUint8List();
+                              /// get result uint8List
+                              Uint8List result = await ImageCrop.getResult(
+                                clipRect: _resultRect, 
+                                image: bytes
+                              );
+                              
+                              setState(() {
+                                exportLoading = false;
+                              });
+
+                              /// if you need to export to gallery
+                              /// you can use this https://pub.dev/packages/image_gallery_saver
+                              /// ... your export code ...
+                              /// 
+                              /// my code is only to show result in other page
+                              Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                                return ImageResultPage(imageBytes: result,);
+                              }));
                             },
                           ),
                         ],
