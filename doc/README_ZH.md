@@ -83,6 +83,25 @@ CropBox(
 )
 ```
 
+### 导出图片
+
+可以使用 `ImageCrop.getResult` 获取裁剪后图片的数据，并且使用这些数据去展示或导出图片
+
+> more details in `example`
+
+```dart
+/// get origin image uint8List
+Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imageUrl))
+  .load(imageUrl))
+  .buffer
+  .asUint8List();
+/// get result uint8List
+Uint8List result = await ImageCrop.getResult(
+  clipRect: _resultRect, 
+  image: bytes
+);
+```
+
 ## TODO
 
 * [x] 动态变换裁剪框比例
@@ -91,3 +110,4 @@ CropBox(
 * [x] 支持圆角裁剪框绘制
 * [ ] 支持旋转
 * [x] 支持网格线
+* [x] 支持导出图片

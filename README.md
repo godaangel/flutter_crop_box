@@ -89,6 +89,25 @@ CropBox(
 )
 ```
 
+### Real Image Crop
+
+You can Use `ImageCrop.getResult` to get real image bytes.
+
+> more details in `example`
+
+```dart
+/// get origin image uint8List
+Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imageUrl))
+  .load(imageUrl))
+  .buffer
+  .asUint8List();
+/// get result uint8List
+Uint8List result = await ImageCrop.getResult(
+  clipRect: _resultRect, 
+  image: bytes
+);
+```
+
 ## TODO
 
 * [x] Dynamically transform crop box scale
@@ -102,3 +121,5 @@ CropBox(
 * [ ] Support rotation
 
 * [x] Support Gridlines
+
+* [x] Real image crop to Uint8List
