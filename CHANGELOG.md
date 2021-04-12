@@ -33,3 +33,7 @@
 ## [0.1.8] - 2021-04-03.
 
 * add `ImageCrop.getResult` to get real image crop result Uint8List;
+
+## [0.1.9] - 2021-04-12.
+
+* add `ImageCrop.getImageSize` to get real image size;
