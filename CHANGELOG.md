@@ -43,6 +43,6 @@
 * bug fix;
 
 
-## [0.1.12] - 2021-04-25.
+## [0.1.13] - 2021-04-25.
 
-* bug fix;
+* add `quality` and `size` to `ImageCrop.getResult`;

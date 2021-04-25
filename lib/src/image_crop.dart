@@ -8,12 +8,13 @@ import 'package:exif/exif.dart';
 class ImageCropOutputFormatQuality {
   static const int VeryHigh = 100;
   static const int High = 75;
-  static const int Middel = 50;
+  static const int Middle = 50;
   static const int Low = 25;
+  static const int VeryLow = 5;
 }
 class ImageCrop {
   /// get crop result image, type is Uint8List
-  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image, int outputQuality}) async {
+  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image, int outputQuality, Size outputSize}) async {
 
     final Size memoryImageSize = await getImageSize(image);
     final editorOption = ImageEditorOption();
@@ -25,7 +26,11 @@ class ImageCrop {
       height: clipRect.height * memoryImageSize.height
     ));
 
-    editorOption.outputFormat = OutputFormat.png(outputQuality ?? ImageCropOutputFormatQuality.High);
+    if(outputSize != null) {
+      editorOption.addOption(ScaleOption(outputSize.width.toInt(), outputSize.height.toInt()));
+    }
+
+    editorOption.outputFormat = OutputFormat.jpeg(outputQuality ?? ImageCropOutputFormatQuality.High);
     final result = await ImageEditor.editImage(image: image, imageEditorOption: editorOption);
     return result;
   }
