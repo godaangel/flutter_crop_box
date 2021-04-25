@@ -5,9 +5,15 @@ import 'package:image_editor/image_editor.dart';
 import 'package:image_size_getter/image_size_getter.dart' as imageGetter;
 import 'package:exif/exif.dart';
 
+class ImageCropOutputFormatQuality {
+  static const int VeryHigh = 100;
+  static const int High = 75;
+  static const int Middel = 50;
+  static const int Low = 25;
+}
 class ImageCrop {
   /// get crop result image, type is Uint8List
-  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image}) async {
+  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image, ImageCropOutputFormatQuality outputQuality}) async {
 
     final Size memoryImageSize = await getImageSize(image);
     final editorOption = ImageEditorOption();
@@ -19,7 +25,7 @@ class ImageCrop {
       height: clipRect.height * memoryImageSize.height
     ));
 
-    editorOption.outputFormat = OutputFormat.png(88);
+    editorOption.outputFormat = OutputFormat.png(outputQuality ?? ImageCropOutputFormatQuality.High);
     final result = await ImageEditor.editImage(image: image, imageEditorOption: editorOption);
     return result;
   }

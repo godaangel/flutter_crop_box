@@ -37,3 +37,7 @@
 ## [0.1.9] - 2021-04-12.
 
 * add `ImageCrop.getImageSize` to get real image size;
+
+## [0.1.10] - 2021-04-25.
+
+* bug fix;
