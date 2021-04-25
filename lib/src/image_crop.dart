@@ -13,7 +13,7 @@ class ImageCropOutputFormatQuality {
 }
 class ImageCrop {
   /// get crop result image, type is Uint8List
-  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image, ImageCropOutputFormatQuality outputQuality}) async {
+  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image, int outputQuality}) async {
 
     final Size memoryImageSize = await getImageSize(image);
     final editorOption = ImageEditorOption();
