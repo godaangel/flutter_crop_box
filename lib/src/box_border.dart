@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CropBoxBorder {
   /// 方形模式下，边框的圆角
-  final Radius radius;
+  final Radius? radius;
   Radius get noNullRaidus => radius ?? Radius.circular(0);
 
   /// 边框宽度

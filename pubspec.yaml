@@ -1,19 +1,19 @@
 name: crop_box
 description: "A component that can be tailored for a variety of materials.Widget for Clip."
-version: 0.1.13
+version: 1.0.0
 author: yangdz30@gmail.com
 homepage: https://github.com/godaangel/flutter_crop_box
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  image_editor: 0.7.3
-  image_size_getter: 0.3.0
-  exif: 1.0.3
+  image_editor: ^1.0.0
+  image_size_getter: ^1.0.0
+  exif: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

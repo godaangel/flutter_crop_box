@@ -22,7 +22,7 @@ class CropBox extends StatefulWidget {
   /// 初始裁剪区域（LTRB均是 0 到 1 的double类型）
   /// 
   /// 如果不填，默认会填充并居中，表现形式类似cover
-  final Rect cropRect;
+  final Rect? cropRect;
   /// 待裁剪素材的尺寸
   final Size clipSize;
   /// 子组件
@@ -32,21 +32,21 @@ class CropBox extends StatefulWidget {
   /// 裁剪框比例
   /// 
   /// 默认 16:9
-  final Size cropRatio;
+  final Size? cropRatio;
   /// 裁剪框当前比例下最大宽高
   /// 
   /// 主要是用于需要主动调整裁剪框大小时使用 如果没有特殊需求，不需要配置
-  final Size maxCropSize;
+  final Size? maxCropSize;
   /// 最大放大尺寸
   /// 
   /// 允许放大的最大尺寸，默认10.0
   final double maxScale;
   /// 裁剪区域开始变化时的回调
-  final Function cropRectUpdateStart;
+  final Function? cropRectUpdateStart;
   /// 裁剪区域变化时的回调
   /// 
   /// 可用于初始生成裁剪区域，以及手势触发的回调
-  final _CropRectUpdate cropRectUpdate;
+  final _CropRectUpdate? cropRectUpdate;
   /// 裁剪区域停止变化时的回调函数，可以获得最终裁剪区域
   /// 
   /// 返回值 `Rect rect` 为裁剪区域在素材上的比例
@@ -74,17 +74,17 @@ class CropBox extends StatefulWidget {
   final bool needInnerBorder;
 
   /// 网格线
-  final GridLine gridLine;
+  final GridLine? gridLine;
 
   /// 裁剪框边框样式
   /// 
   /// 包含颜色、宽度、圆角等信息
-  final CropBoxBorder cropBoxBorder;
+  final CropBoxBorder? cropBoxBorder;
 
   /// 裁剪框背景颜色
   /// 
   /// default [Color(0xff141414)]
-  final Color backgroundColor;
+  final Color? backgroundColor;
   
   /// ### 裁剪素材组件 
   /// 
@@ -125,7 +125,7 @@ class CropBox extends StatefulWidget {
   /// )
   /// ```
   /// {@end-tool}
-  CropBox({this.cropRect, @required this.clipSize, @required this.child, @required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder, this.backgroundColor});
+  CropBox({this.cropRect, required this.clipSize, required this.child, required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder, this.backgroundColor});
 
   @override
   _CropBoxState createState() => _CropBoxState();
@@ -142,7 +142,7 @@ class _CropBoxState extends State<CropBox> {
   /// 待裁剪素材初始偏移量
   Offset _deltaPoint = Offset(0, 0);
   /// 待裁剪的素材本身尺寸 - 由外部传入
-  Size _originClipSize;
+  late Size _originClipSize;
   /// 待裁剪的素材计算后的初始尺寸
   Size _resizeClipSize = Size(0, 0);
 
@@ -163,7 +163,7 @@ class _CropBoxState extends State<CropBox> {
   /// 裁剪框实际坐标
   Rect _cropBoxRealRect = Rect.fromLTWH(0, 0, 0, 0);
   /// 裁剪比例
-  Size _cropRatio;
+  Size _cropRatio = Size(16, 9);
   /// 中心点坐标
   Offset _originPos = Offset(0, 0);
 
@@ -172,12 +172,12 @@ class _CropBoxState extends State<CropBox> {
   /// LTRB值均为0到1的double值，代表在本轴上的百分比位置
   /// 
   /// 包含了缩放尺寸，需要自行判断计算
-  Rect resultRect;
+  Rect resultRect = Rect.fromLTRB(0, 0, 1, 1);
 
   // 是否绘制完毕
   bool isReady = false;
 
-  Future<void> _loading;
+  Future<void>? _loading;
 
   @override
   void initState() {
@@ -236,8 +236,9 @@ class _CropBoxState extends State<CropBox> {
   /// 根据初始素材尺寸以及scale确定初始位置
   void caculateInitClipPosition() {
     // 根据scale和传入的裁剪区域确定具体位置
-    Rect _clipRect;
-    if(resultRect == null || resultRect == Rect.fromLTRB(0, 0, 1, 1)) {
+    Rect? _clipRect;
+    
+    if(resultRect == Rect.fromLTRB(0, 0, 1, 1)) {
       // 如果没有传入初始裁剪区域，则默认居中裁剪对应比例的区域，那么scale必然为1
       _scale = 1.0;
       _deltaPoint = Offset(_originPos.dx - _resizeClipSize.width/2, _originPos.dy - _resizeClipSize.height/2);
@@ -353,7 +354,7 @@ class _CropBoxState extends State<CropBox> {
       double _height = _resizeClipSize.height / _scale;
       double _bottom = _top + 1 / _scale;
       double _right = _left + _height * _cropAspectRatio / _resizeClipSize.width;
-      _scale = resultRect != null ? (1 / resultRect.height) : 1;
+      _scale = 1 / resultRect.height;
       resultRect = Rect.fromLTRB(_left, _top, _right, _bottom);
     }
 
@@ -400,11 +401,11 @@ class _CropBoxState extends State<CropBox> {
   @override
   Widget build(BuildContext context) {
     if(!isReady) {
-      resultRect = widget.cropRect;
-      assert(resultRect?.left == null || resultRect.left >= 0 && resultRect.left <=1);
-      assert(resultRect?.right == null || resultRect.right >= 0 && resultRect.right <=1);
-      assert(resultRect?.top == null || resultRect.top >= 0 && resultRect.top <=1);
-      assert(resultRect?.bottom == null || resultRect.bottom >= 0 && resultRect.bottom <=1);
+      resultRect = widget.cropRect ?? Rect.fromLTRB(0, 0, 1, 1);
+      assert(resultRect.left >= 0 && resultRect.left <=1);
+      assert(resultRect.right >= 0 && resultRect.right <=1);
+      assert(resultRect.top >= 0 && resultRect.top <=1);
+      assert(resultRect.bottom >= 0 && resultRect.bottom <=1);
 
       _originClipSize = widget.clipSize;
       if(widget.cropBoxType == CropBoxType.Circle) {
@@ -414,15 +415,15 @@ class _CropBoxState extends State<CropBox> {
       }
 
       _loading = Future.delayed(Duration(milliseconds: 10)).then((value) {
-        _containerWidth = context.size.width;
-        _containerHeight = context.size.height;
+        _containerWidth = context.size!.width;
+        _containerHeight = context.size!.height;
         _containerPaddingTop = MediaQuery.of(context).padding.top * 2;
         _cropBoxMaxSize = widget.maxCropSize ?? Size(_containerWidth - _containerPaddingRL*2, _containerHeight - _containerPaddingTop - _containerPaddingBottom);
         print("build init data \n _containerWidth: $_containerWidth _containerHeight: $_containerHeight _containerPaddingTop: $_containerPaddingTop");
         isReady = initCrop();
         if(widget.cropRectUpdate != null) {
           resultRect = transPointToCropArea();
-          widget.cropRectUpdate(resultRect);
+          widget.cropRectUpdate!(resultRect);
         }
         setState(() {});
       });
@@ -436,7 +437,7 @@ class _CropBoxState extends State<CropBox> {
             color: widget.backgroundColor ?? Color(0xff141414),
             child: GestureDetector(
               onScaleStart: _handleScaleStart,
-              onScaleUpdate: (d) => _handleScaleUpdate(context.size, d),
+              onScaleUpdate: (d) => _handleScaleUpdate(context.size!, d),
               onScaleEnd: _handleScaleEnd,
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 200),
@@ -463,7 +464,7 @@ class _CropBoxState extends State<CropBox> {
                       size: Size(double.infinity, double.infinity),
                       painter: widget.cropBoxType == CropBoxType.Circle ? 
                         DrawCircleLight(clipRect: _cropBoxRealRect, centerPoint: _originPos, cropBoxBorder: widget.cropBoxBorder ?? CropBoxBorder()) 
-                        : DrawRectLight(clipRect: _cropBoxRealRect, needInnerBorder: widget.needInnerBorder, gridLine: widget.gridLine, cropBoxBorder: widget.cropBoxBorder ?? CropBoxBorder()),
+                        : DrawRectLight(clipRect: _cropBoxRealRect, needInnerBorder: widget.needInnerBorder, gridLine: widget.gridLine, cropBoxBorder: widget.cropBoxBorder),
                     ),
                   ],
                 ): Center(
@@ -486,7 +487,7 @@ class _CropBoxState extends State<CropBox> {
     _lastFocalPoint = details.focalPoint;
     
     if(widget.cropRectUpdateStart != null) {
-      widget.cropRectUpdateStart();
+      widget.cropRectUpdateStart!();
     }
   }
 
@@ -500,7 +501,7 @@ class _CropBoxState extends State<CropBox> {
       resizeRange();
     });
     if(widget.cropRectUpdate != null) {
-      widget.cropRectUpdate(resultRect);
+      widget.cropRectUpdate!(resultRect);
     }
   }
 
@@ -513,15 +514,16 @@ class _CropBoxState extends State<CropBox> {
 class DrawRectLight extends CustomPainter {
   final Rect clipRect;
   final bool needInnerBorder;
-  final GridLine gridLine;
-  final CropBoxBorder cropBoxBorder;
-  DrawRectLight({@required this.clipRect, this.needInnerBorder, this.gridLine, this.cropBoxBorder});
+  final GridLine? gridLine;
+  final CropBoxBorder? cropBoxBorder;
+  DrawRectLight({required this.clipRect, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder});
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();
-    double _storkeWidth = cropBoxBorder.width;
-    Radius _borderRadius = cropBoxBorder.noNullRaidus;
+    CropBoxBorder _cropBoxBorder = cropBoxBorder ?? CropBoxBorder();
+    double _storkeWidth = _cropBoxBorder.width;
+    Radius _borderRadius = _cropBoxBorder.noNullRaidus;
     RRect _rrect = RRect.fromRectAndRadius(clipRect, _borderRadius);
     RRect _borderRRect = RRect.fromRectAndRadius(Rect.fromLTWH(clipRect.left, clipRect.top - _storkeWidth / 2, clipRect.width, clipRect.height + _storkeWidth), _borderRadius);
 
@@ -543,7 +545,7 @@ class DrawRectLight extends CustomPainter {
 
     // 绘制主色调边框
     paint
-      ..color = cropBoxBorder.color
+      ..color = _cropBoxBorder.color
       ..style = PaintingStyle.stroke
       ..strokeWidth = _storkeWidth;
       
@@ -553,21 +555,21 @@ class DrawRectLight extends CustomPainter {
       canvas.save();
       // 绘制主色调边框
       paint
-        ..color = gridLine.color
+        ..color = gridLine!.color
         ..style = PaintingStyle.stroke
-        ..strokeWidth = gridLine.width;
+        ..strokeWidth = gridLine!.width;
       Path gridLinePath = new Path();
 
-      EdgeInsets _padding = gridLine.padding ?? EdgeInsets.all(0);
+      EdgeInsets _padding = gridLine!.padding ?? EdgeInsets.all(0);
 
       for(int i = 1; i < 3; i ++) {
         // 绘制横线
-        gridLinePath.moveTo(((clipRect.width / 3) * i + clipRect.left - gridLine.width / 2), clipRect.top + _padding.top);
-        gridLinePath.lineTo(((clipRect.width / 3) * i + clipRect.left - gridLine.width / 2), clipRect.top + clipRect.height - _padding.bottom);
+        gridLinePath.moveTo(((clipRect.width / 3) * i + clipRect.left - gridLine!.width / 2), clipRect.top + _padding.top);
+        gridLinePath.lineTo(((clipRect.width / 3) * i + clipRect.left - gridLine!.width / 2), clipRect.top + clipRect.height - _padding.bottom);
 
         // 绘制竖线
-        gridLinePath.moveTo(clipRect.left + _padding.left, ((clipRect.height / 3) * i + clipRect.top - gridLine.width / 2));
-        gridLinePath.lineTo(clipRect.left + clipRect.width - _padding.right, ((clipRect.height / 3) * i + clipRect.top - gridLine.width / 2));
+        gridLinePath.moveTo(clipRect.left + _padding.left, ((clipRect.height / 3) * i + clipRect.top - gridLine!.width / 2));
+        gridLinePath.lineTo(clipRect.left + clipRect.width - _padding.right, ((clipRect.height / 3) * i + clipRect.top - gridLine!.width / 2));
       }
       canvas.drawPath(gridLinePath, paint);
       canvas.restore();
@@ -595,13 +597,15 @@ class DrawRectLight extends CustomPainter {
 class DrawCircleLight extends CustomPainter {
   final Rect clipRect;
   final Offset centerPoint;
-  final CropBoxBorder cropBoxBorder;
-  DrawCircleLight({@required this.clipRect, this.centerPoint, this.cropBoxBorder});
+  final CropBoxBorder? cropBoxBorder;
+  DrawCircleLight({required this.clipRect, required this.centerPoint, this.cropBoxBorder});
 
   @override
   void paint(Canvas canvas, Size size) {
+    CropBoxBorder _cropBoxBorder = cropBoxBorder ?? CropBoxBorder();
+
     var paint = Paint();
-    double _storkeWidth = cropBoxBorder.width;
+    double _storkeWidth = _cropBoxBorder.width;
     double _radius = clipRect.width / 2;
     paint
       ..style = PaintingStyle.fill
@@ -620,7 +624,7 @@ class DrawCircleLight extends CustomPainter {
 
     // 绘制主色调边框
     paint
-      ..color = cropBoxBorder.color
+      ..color = _cropBoxBorder.color
       ..style = PaintingStyle.stroke
       ..strokeWidth = _storkeWidth;
     canvas.drawCircle(centerPoint, _radius, paint);

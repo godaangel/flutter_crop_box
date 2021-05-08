@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImageResultPage extends StatefulWidget {
   final Uint8List imageBytes;
-  ImageResultPage({Key key, @required this.imageBytes}) : super(key: key);
+  ImageResultPage({Key? key, required this.imageBytes}) : super(key: key);
 
   @override
   _ImageResultPageState createState() => _ImageResultPageState();

@@ -7,7 +7,7 @@ class GridLine {
   /// 网格线宽度
   double width;
   /// 网格线padding
-  EdgeInsets padding;
+  EdgeInsets? padding;
 
   /// 网格线
   GridLine({this.color = Colors.white, this.width = 0.5, this.padding});

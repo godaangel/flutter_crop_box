@@ -9,7 +9,7 @@ import 'package:crop_box/crop_box.dart';
 
 
 class PageIndex extends StatefulWidget {
-  PageIndex({Key key}) : super(key: key);
+  PageIndex({Key? key}) : super(key: key);
 
   @override
   _PageIndexState createState() => _PageIndexState();
@@ -44,15 +44,17 @@ class _PageIndexState extends State<PageIndex> {
             /// Local Image
             TextButton(
               onPressed: () async {
-                PickedFile pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
-                Uint8List bytes = await pickedFile.readAsBytes();
-                Size imageSize = await ImageCrop.getImageSize(bytes);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CropIndex(
-                  width: imageSize.width,
-                  height: imageSize.height,
-                  localImageData: bytes,
-                  clipType: ClipType.localImage,
-                )));
+                PickedFile? pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+                if(pickedFile != null) {
+                  Uint8List bytes = await pickedFile.readAsBytes();
+                  Size imageSize = await ImageCrop.getImageSize(bytes);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CropIndex(
+                    width: imageSize.width,
+                    height: imageSize.height,
+                    localImageData: bytes,
+                    clipType: ClipType.localImage,
+                  )));
+                }
               },
               child: Text('Choose Local Image'),
             ),

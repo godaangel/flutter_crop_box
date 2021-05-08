@@ -13,15 +13,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(750, 1334),
-      allowFontScaling: false,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primaryColor: Color(0xff44D7B6),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: PageIndex(),
-      ),
+      builder: () {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primaryColor: Color(0xff44D7B6),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: PageIndex(),
+        );
+      },
     );
   }
 }

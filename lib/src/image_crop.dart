@@ -14,7 +14,7 @@ class ImageCropOutputFormatQuality {
 }
 class ImageCrop {
   /// get crop result image, type is Uint8List
-  static Future<Uint8List> getResult({@required Rect clipRect, @required Uint8List image, int outputQuality, Size outputSize}) async {
+  static Future<Uint8List?> getResult({required Rect clipRect, required Uint8List image, int? outputQuality, Size? outputSize}) async {
 
     final Size memoryImageSize = await getImageSize(image);
     final editorOption = ImageEditorOption();
@@ -38,12 +38,12 @@ class ImageCrop {
   /// get image size with exif
   static Future<Size> getImageSize(Uint8List bytes) async {
     try {
-      Map<String, IfdTag> data =
+      Map<String?, IfdTag>? data =
         await readExifFromBytes(bytes);
-      double width = data['EXIF ExifImageWidth'].values[0].toDouble();
-      double height = data['EXIF ExifImageLength'].values[0].toDouble();
+      double width = data?['EXIF ExifImageWidth']?.values?[0].toDouble();
+      double height = data?['EXIF ExifImageLength']?.values?[0].toDouble();
       if(width > height) {
-        if (data['Image Orientation'].printable.contains('Horizontal')) {
+        if (data!['Image Orientation']!.printable!.contains('Horizontal')) {
           return Size(width.toDouble(), height);
         }else {
           return Size(height, width);
@@ -52,7 +52,6 @@ class ImageCrop {
         return Size(width, height);
       }
     } catch (e) {
-      print(e);
       imageGetter.ImageInput imageInput = imageGetter.MemoryInput(bytes);
       double width = imageGetter.ImageSizeGetter.getSize(imageInput).width.toDouble();
       double height = imageGetter.ImageSizeGetter.getSize(imageInput).height.toDouble();

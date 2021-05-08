@@ -19,9 +19,9 @@ class CropIndex extends StatefulWidget {
   final double width;
   final double height;
   final ClipType clipType;
-  final Uint8List localImageData;
-  final String imageUrl;
-  CropIndex({Key key, this.width, this.height, this.clipType, this.localImageData, this.imageUrl}) : super(key: key);
+  final Uint8List? localImageData;
+  final String? imageUrl;
+  CropIndex({Key? key, required this.width, required this.height, required this.clipType, this.localImageData, this.imageUrl}) : super(key: key);
 
   @override
   _CropIndexState createState() => _CropIndexState();
@@ -34,7 +34,7 @@ class _CropIndexState extends State<CropIndex> {
   /// 裁剪比例
   Size _cropRatio = Size(16, 9);
   /// 裁剪区域
-  Rect _cropRect;
+  Rect? _cropRect;
 
   bool exportLoading = false;
 
@@ -74,23 +74,23 @@ class _CropIndexState extends State<CropIndex> {
                   setState(() {});
                 },
                 child: widget.clipType == ClipType.networkImage ? Image.network(
-                  widget.imageUrl,
+                  widget.imageUrl!,
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.contain,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                     if (loadingProgress == null)
                       return child;
                     return Center(
                       child: CircularProgressIndicator(
                         value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                            ? loadingProgress.cumulativeBytesLoaded.toDouble() / loadingProgress.expectedTotalBytes!.toDouble()
                             : null,
                       ),
                     );
                   },
                 ) : Image.memory(
-                    widget.localImageData,
+                    widget.localImageData!,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.contain,
@@ -207,18 +207,18 @@ class _CropIndexState extends State<CropIndex> {
                               /// get origin image uint8List
                               Uint8List bytes;
                               if(widget.clipType == ClipType.networkImage) {
-                                bytes = (await NetworkAssetBundle(Uri.parse(widget.imageUrl))
-                                .load(widget.imageUrl))
+                                bytes = (await NetworkAssetBundle(Uri.parse(widget.imageUrl!))
+                                .load(widget.imageUrl!))
                                 .buffer
                                 .asUint8List();
                               }else{
-                                bytes = widget.localImageData;
+                                bytes = widget.localImageData!;
                               }
                               /// get result uint8List
-                              Uint8List result = await ImageCrop.getResult(
+                              Uint8List result = (await ImageCrop.getResult(
                                 clipRect: _resultRect, 
                                 image: bytes
-                              );
+                              ))!;
                               
                               setState(() {
                                 exportLoading = false;
