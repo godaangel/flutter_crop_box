@@ -23,6 +23,7 @@
 | cropBoxType | CropBoxType | 裁剪框样式，默认方形，可以换成圆形，如果是圆形，则`cropRatio`设置的值将失效，强制变为`1:1` | CropBoxType.Square |
 | gridLine | GridLine | 裁剪网格线 | - |
 | backgroundColor | Color | 背景色 | `Color(0xff141414)` |
+| maskColor | Color | 遮罩颜色 | `Color.fromRGBO(0, 0, 0, 0.5)` |
 | cropBoxBorder | CropBoxBorder | 裁剪框样式，包含颜色、宽度和圆角信息 | `cropBoxBorder.width = 2` `cropBoxBorder.color = Colors.white` `cropBoxBorder.radius = Radius.circular(0)` |
 | cropRectUpdateStart | Function | 裁剪区域开始变化时的回调 | - |
 | cropRectUpdate | Function(Rect rect) | 裁剪区域变化时的回调 | - |

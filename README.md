@@ -30,6 +30,7 @@ At the beginning of requirement design, considering the habit of gesture and ref
 | cropBoxType | CropBoxType | Crop box style, default square, can be changed to circle. If it is a circle, the value set by `CropRatio` will be invalid and forced to `1:1` | CropBoxType.Square |
 | gridLine | GridLine | Clipping gridlines | - |
 | backgroundColor | Color | Background Color | `Color(0xff141414)` |
+| maskColor | Color | Mask Color | `Color.fromRGBO(0, 0, 0, 0.5)` |
 | cropBoxBorder | CropBoxBorder | Crop box style, including color, width and rounded corner information | `cropBoxBorder.width = 2` `cropBoxBorder.color = Colors.white` `cropBoxBorder.radius = Radius.circular(0)` |
 | cropRectUpdateStart | Function | Callback when crop region begins to change | - |
 | cropRectUpdate | Function(Rect rect) | Callback when clipping region changes | - |

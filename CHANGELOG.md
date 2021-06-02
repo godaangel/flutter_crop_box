@@ -49,3 +49,7 @@
 ## [1.0.1] - 2021-05-08.
 
 * add `quality` and `size` to `ImageCrop.getResult`;
+
+## [1.0.2] - 2021-06-02.
+
+* add `maskColor`;

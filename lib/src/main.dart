@@ -85,6 +85,11 @@ class CropBox extends StatefulWidget {
   /// 
   /// default [Color(0xff141414)]
   final Color? backgroundColor;
+
+  /// 遮罩层颜色
+  /// 
+  /// default [Color.fromRGBO(0, 0, 0, 0.5)]
+  final Color? maskColor;
   
   /// ### 裁剪素材组件 
   /// 
@@ -125,7 +130,7 @@ class CropBox extends StatefulWidget {
   /// )
   /// ```
   /// {@end-tool}
-  CropBox({this.cropRect, required this.clipSize, required this.child, required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder, this.backgroundColor});
+  CropBox({this.cropRect, required this.clipSize, required this.child, required this.cropRectUpdateEnd, this.cropRectUpdateStart, this.cropRectUpdate, this.cropRatio, this.maxCropSize, this.maxScale = 10.0, this.cropBoxType = CropBoxType.Square, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder, this.backgroundColor, this.maskColor});
 
   @override
   _CropBoxState createState() => _CropBoxState();
@@ -463,8 +468,8 @@ class _CropBoxState extends State<CropBox> {
                     CustomPaint(
                       size: Size(double.infinity, double.infinity),
                       painter: widget.cropBoxType == CropBoxType.Circle ? 
-                        DrawCircleLight(clipRect: _cropBoxRealRect, centerPoint: _originPos, cropBoxBorder: widget.cropBoxBorder ?? CropBoxBorder()) 
-                        : DrawRectLight(clipRect: _cropBoxRealRect, needInnerBorder: widget.needInnerBorder, gridLine: widget.gridLine, cropBoxBorder: widget.cropBoxBorder),
+                        DrawCircleLight(clipRect: _cropBoxRealRect, centerPoint: _originPos, cropBoxBorder: widget.cropBoxBorder ?? CropBoxBorder(), maskColor: widget.maskColor) 
+                        : DrawRectLight(clipRect: _cropBoxRealRect, needInnerBorder: widget.needInnerBorder, gridLine: widget.gridLine, cropBoxBorder: widget.cropBoxBorder, maskColor: widget.maskColor),
                     ),
                   ],
                 ): Center(
@@ -516,7 +521,8 @@ class DrawRectLight extends CustomPainter {
   final bool needInnerBorder;
   final GridLine? gridLine;
   final CropBoxBorder? cropBoxBorder;
-  DrawRectLight({required this.clipRect, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder});
+  final Color? maskColor;
+  DrawRectLight({required this.clipRect, this.needInnerBorder = false, this.gridLine, this.cropBoxBorder, this.maskColor});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -529,7 +535,7 @@ class DrawRectLight extends CustomPainter {
 
     paint
       ..style = PaintingStyle.fill
-      ..color = Color.fromRGBO(0, 0, 0, 0.5);
+      ..color = maskColor ?? Color.fromRGBO(0, 0, 0, 0.5);
     canvas.save();
 
     // 绘制一个圆形反选框和背景遮罩（透明部分）
@@ -598,7 +604,8 @@ class DrawCircleLight extends CustomPainter {
   final Rect clipRect;
   final Offset centerPoint;
   final CropBoxBorder? cropBoxBorder;
-  DrawCircleLight({required this.clipRect, required this.centerPoint, this.cropBoxBorder});
+  final Color? maskColor;
+  DrawCircleLight({required this.clipRect, required this.centerPoint, this.cropBoxBorder, this.maskColor});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -609,7 +616,7 @@ class DrawCircleLight extends CustomPainter {
     double _radius = clipRect.width / 2;
     paint
       ..style = PaintingStyle.fill
-      ..color = Color.fromRGBO(0, 0, 0, 0.5);
+      ..color = maskColor ?? Color.fromRGBO(0, 0, 0, 0.5);
     canvas.save();
     // 绘制一个圆形反选框和背景遮罩（透明部分）
     Path path = Path.combine(
